@@ -1,0 +1,15 @@
+{
+    "manifest_version": 2,
+    "version": "0.0.1",
+    "name": "Meus Dividendos",
+    "description": "Extensão Meus Dividendos",
+    "author": "Núbio Knupp",
+    "browser_action": {
+        "default_title": "Meus Dividendos",
+        "default_popup": "index.html",
+        "default_icon": "icon.png"
+    },
+    "permissions": [
+        "storage","tabs","https://sung.codes"
+    ]
+}
