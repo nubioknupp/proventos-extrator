@@ -1,20 +1,24 @@
-function display_h1(tabId, tabTitle) {
-    let code = 'document.querySelector("#gatsby-focus-wrapper)';
-    let $id2 = document.querySelector("#id2");
-    document.querySelector("#id1").innerHTML = "<p>1 tab title: " + tabTitle + " tabId: " + tabId + "</p>";
+const Seletores =
+{
+    BotaoFiltrar: '#botao-filtrar',
+};
 
-    chrome.tabs.executeScript(tabId, { code }, function (result) {
-        $id2.innerHTML = "2 - ";
-    });
+var color = 'coral';
+var $conteudo = document.querySelector('.conteudo');
+var changeColor = document.getElementById("changeColor");
+
+function reddenPage(seletores) {
+  const $botaoFiltrar = document.querySelector(seletores.BotaoFiltrar);
+
+  console.log('botao-filtrar', $botaoFiltrar);
 }
 
-chrome.tabs.query({ active: true }, function (tabs) {
+changeColor.addEventListener("click", async () => {
+  let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
-    //   tab_title = tab.title;
-    //   chrome.tabs.executeScript(tab.id, {
-    //     code: 'document.querySelector("#container")'
-    //   }, );
-    var tab = tabs[0];
-
-    display_h1(tab.id, JSON.stringify(tab))
+  chrome.scripting.executeScript({
+    target: { tabId: tab.id },
+    function: reddenPage,
+    args: [Seletores],
+  });
 });
