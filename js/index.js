@@ -1,35 +1,52 @@
 const Seletores =
 {
-    BotaoFiltrar: '#botao-filtrar',
+  BotaoFiltrar: '#botao-filtrar',
 };
 
 var color = 'coral';
 var $conteudo = document.querySelector('.conteudo');
 var changeColor = document.getElementById("changeColor");
 
-function reddenPage(seletores) {
-  const $botaoFiltrar = document.querySelector(seletores.BotaoFiltrar);
-  const script = document.createElement("script");
+localStorage.setItem('meuGato', 'Tom');
 
-  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/bean/1.0.15/bean.min.js';
+function reddenPage(seletores, id) {
+  console.debug('message');
 
-  console.log('OI! OI!');
-
-  document.head.appendChild(script)
-
-  // document.body.insertAdjacentElement('beforeend',script);
-  // document.head.insertAdjacentElement('beforeend',script);
-  
-
-  console.log('botao-filtrar', $botaoFiltrar);
+  var laserExtensionId = "hnpilikmlhoobghogidgcologoocaoon";
+  chrome.runtime.sendMessage(laserExtensionId, {getTargetData: true},
+    function(response) {
+      if (targetInRange(response.targetData))
+        chrome.runtime.sendMessage(laserExtensionId, {activateLasers: true});
+    }
+  );
 }
-
 changeColor.addEventListener("click", async () => {
   let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
   chrome.scripting.executeScript({
     target: { tabId: tab.id },
     function: reddenPage,
-    args: [Seletores],
+    args: [Seletores, tab.id],
   });
 });
+
+chrome.runtime.onMessageExternal.addListener(
+  function (request, sender, sendResponse) {
+    console.debug('message 2');
+
+    // if (sender.id === blocklistedExtension)
+    //   return;  // don't allow this extension access
+    // else if (request.getTargetData)
+    //   sendResponse({targetData: targetData});
+    // else if (request.activateLasers) {
+    var success = activateLasers();
+    sendResponse({ activateLasers: success });
+    //}
+  });
+
+// chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+//   localStorage.setItem('meuGato', 'Tom 2');
+//   console.debug('message');
+//   // Handle message.
+//   // In this example, message === 'whatever value; String, object, whatever'
+// })
